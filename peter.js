@@ -1,8 +1,11 @@
 function checkForDuplicates() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  const range1 = sheet.getRange('B2:B15'); // range of section 1
-  const range2 = sheet.getRange('D2:D15'); // range of section 2
-  const range3 = sheet.getRange('F2:F15'); // range of section 3
+  const spreadsheet = SpreadsheetApp.openById(
+    "1WpTrxF-ZLVtm5fXxt2cJnn4wbYJO6VQfB1BnyeSBLtk"
+  );
+  const sheet = spreadsheet.getActiveSheet();
+  const range1 = sheet.getRange("B2:B15"); // range of section 1
+  const range2 = sheet.getRange("D2:D15"); // range of section 2
+  const range3 = sheet.getRange("F2:F15"); // range of section 3
   const values1 = range1.getValues();
   const values2 = range2.getValues();
   const values3 = range3.getValues();
@@ -27,5 +30,4 @@ function checkForDuplicates() {
   } else {
     console.log("No Duplicates Found.");
   }
-
 }
