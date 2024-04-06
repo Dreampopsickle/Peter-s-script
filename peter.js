@@ -1,33 +1,35 @@
-function checkForDuplicates() {
-  const spreadsheet = SpreadsheetApp.openById(
-    "1WpTrxF-ZLVtm5fXxt2cJnn4wbYJO6VQfB1BnyeSBLtk"
-  );
-  const sheet = spreadsheet.getSheetByName("sheet7");
-  const range1 = sheet.getRange("B2:B15"); // range of section 1
-  const range2 = sheet.getRange("D2:D15"); // range of section 2
-  const range3 = sheet.getRange("F2:F15"); // range of section 3
-  const values1 = range1.getValues();
-  const values2 = range2.getValues();
-  const values3 = range3.getValues();
-  let duplicates = [];
+function onEdit(e) {
+  const sheet = e.source.getActiveSheet();
+  const editedRange = e.range;
+  const row = editedRange.getRow();
+  const col = editedRange.getColumn();
 
-  const flatValuesLoop = (arr) => {
-    arr.forEach((value, index) => {
-      if (value !== "" && arr.indexOf(value) && !duplicates.includes(value)) {
-        duplicates.push(value);
-      }
-    });
-  };
+  // Check if the edit is within the specified rows and in the relevant columns
+  if (row >= 2 && row <= 15) {
+    if ([2, 4, 6].includes(col)) {
+      // Columns B, D, F for sections
+      checkForOverlap(sheet, row);
+    }
+  }
+}
 
-  // Flatten Array of arrays to single level and check for duplicates
-  flatValuesLoop(values1.flat());
-  flatValuesLoop(values2.flat());
-  flatValuesLoop(values3.flat());
+function checkForOverlap(sheet, row) {
+  const sectionValues = [
+    sheet.getRange(`B${row}`).getValue(),
+    sheet.getRange(`D${row}`).getValue(),
+    sheet.getRange(`F${row}`).getValue(),
+  ].filter((value) => value !== ""); // Filter out empty strings
 
-  // Log Results
-  if (duplicates.length > 0) {
-    console.log('Duplicates Found: ${duplicates.join(", ")}');
-  } else {
-    console.log("No Duplicates Found.");
+  console.log(`Checking overlap for row ${row}`, sectionValues);
+
+  // Proceed with overlap check only if there is at least one non-empty value
+  if (
+    sectionValues.length > 0 &&
+    new Set(sectionValues).size !== sectionValues.length
+  ) {
+    SpreadsheetApp.getUi().alert(
+      "Overlap detected in sections. Please choose a different section."
+    );
+    sheet.getActiveCell().clearContent();
   }
 }
