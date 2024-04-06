@@ -2,7 +2,7 @@ function checkForDuplicates() {
   const spreadsheet = SpreadsheetApp.openById(
     "1WpTrxF-ZLVtm5fXxt2cJnn4wbYJO6VQfB1BnyeSBLtk"
   );
-  const sheet = spreadsheet.getActiveSheet();
+  const sheet = spreadsheet.getSheetByName("sheet7");
   const range1 = sheet.getRange("B2:B15"); // range of section 1
   const range2 = sheet.getRange("D2:D15"); // range of section 2
   const range3 = sheet.getRange("F2:F15"); // range of section 3
